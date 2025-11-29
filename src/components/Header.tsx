@@ -7,20 +7,39 @@ import { Button } from "@/components/ui/button";
 
 const Header = () => {
   const [user, setUser] = useState<any>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
+      if (session?.user) {
+        checkAdminStatus(session.user.id);
+      }
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
+      if (session?.user) {
+        checkAdminStatus(session.user.id);
+      } else {
+        setIsAdmin(false);
+      }
     });
 
     return () => subscription.unsubscribe();
   }, []);
+
+  const checkAdminStatus = async (userId: string) => {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("is_admin")
+      .eq("id", userId)
+      .single();
+    
+    setIsAdmin(profile?.is_admin || false);
+  };
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -58,6 +77,11 @@ const Header = () => {
               <MessageSquare className="h-4 w-4" />
               Support
             </Link>
+            {isAdmin && (
+              <Link to="/admin/upload-vehicle" className="text-foreground hover:text-primary transition-colors font-medium">
+                Admin Upload
+              </Link>
+            )}
           </nav>
 
           {/* CTA Buttons */}
@@ -135,6 +159,15 @@ const Header = () => {
               >
                 Support
               </Link>
+              {isAdmin && (
+                <Link
+                  to="/admin/upload-vehicle"
+                  className="text-foreground hover:text-primary transition-colors font-medium"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Admin Upload
+                </Link>
+              )}
               {user ? (
                 <Button
                   variant="ghost"
