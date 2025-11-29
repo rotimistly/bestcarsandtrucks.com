@@ -99,13 +99,28 @@ const Chat = () => {
 
     setLoading(true);
     try {
-      const { error } = await supabase.from("chat_messages").insert({
-        user_id: user.id,
-        message: newMessage,
-        is_admin: false,
-      });
+      const { data: messageData, error } = await supabase
+        .from("chat_messages")
+        .insert({
+          user_id: user.id,
+          message: newMessage,
+          is_admin: false,
+        })
+        .select()
+        .single();
 
       if (error) throw error;
+
+      // Send email notification to admin
+      if (messageData) {
+        supabase.functions.invoke('send-chat-email', {
+          body: { message_id: messageData.id }
+        }).then(({ error: emailError }) => {
+          if (emailError) {
+            console.error('Error sending email notification:', emailError);
+          }
+        });
+      }
 
       setNewMessage("");
     } catch (error: any) {
