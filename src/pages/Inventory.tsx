@@ -136,6 +136,7 @@ const Inventory = () => {
               {filteredVehicles.map((vehicle, index) => (
                 <VehicleCard
                   key={vehicle.id}
+                  id={vehicle.id}
                   image={vehicle.images[0] || "/placeholder.svg"}
                   title={vehicle.title}
                   price={`$${vehicle.price.toLocaleString()}`}

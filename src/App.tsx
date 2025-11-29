@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import SellCar from "./pages/SellCar";
 import Inventory from "./pages/Inventory";
+import VehicleDetail from "./pages/VehicleDetail";
 import Chat from "./pages/Chat";
 import AdminChat from "./pages/AdminChat";
 import AdminUploadVehicle from "./pages/AdminUploadVehicle";
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/auth" element={<Auth />} />
           <Route path="/sell" element={<SellCar />} />
           <Route path="/inventory" element={<Inventory />} />
+          <Route path="/vehicle/:id" element={<VehicleDetail />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/admin/chat" element={<AdminChat />} />
           <Route path="/admin/upload-vehicle" element={<AdminUploadVehicle />} />

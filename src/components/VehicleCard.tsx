@@ -1,10 +1,12 @@
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, Gauge, Fuel } from "lucide-react";
 
 interface VehicleCardProps {
+  id: string;
   image: string;
   title: string;
   price: string;
@@ -15,7 +17,9 @@ interface VehicleCardProps {
   index: number;
 }
 
-const VehicleCard = ({ image, title, price, year, mileage, fuel, condition, index }: VehicleCardProps) => {
+const VehicleCard = ({ id, image, title, price, year, mileage, fuel, condition, index }: VehicleCardProps) => {
+  const navigate = useNavigate();
+  
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -60,7 +64,10 @@ const VehicleCard = ({ image, title, price, year, mileage, fuel, condition, inde
             </div>
           </div>
 
-          <Button className="w-full bg-secondary hover:bg-secondary/80 text-foreground font-semibold">
+          <Button 
+            onClick={() => navigate(`/vehicle/${id}`)}
+            className="w-full bg-secondary hover:bg-secondary/80 text-foreground font-semibold"
+          >
             View Details
           </Button>
         </CardContent>
