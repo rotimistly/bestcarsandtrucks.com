@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import FeaturedVehicles from "@/components/FeaturedVehicles";
 import Footer from "@/components/Footer";
+import ChatButton from "@/components/ChatButton";
 
 const Index = () => {
   return (
@@ -12,6 +13,7 @@ const Index = () => {
         <FeaturedVehicles />
       </main>
       <Footer />
+      <ChatButton />
     </div>
   );
 };
