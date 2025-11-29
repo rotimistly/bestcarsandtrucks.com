@@ -60,10 +60,9 @@ const Footer = () => {
           <div>
             <h3 className="font-bold text-lg mb-4">Contact</h3>
             <ul className="space-y-3 text-muted-foreground">
-              <li>123 Auto Street</li>
-              <li>New York, NY 10001</li>
-              <li className="pt-2">Phone: (555) 123-4567</li>
-              <li>Email: info@bestcarsandtruck.com</li>
+              <li>Ohio, USA</li>
+              <li className="pt-2">Email: bestcarsandtrucks4@gmail.com</li>
+              <li className="pt-2 font-semibold text-primary">We Deliver Worldwide</li>
             </ul>
           </div>
         </div>

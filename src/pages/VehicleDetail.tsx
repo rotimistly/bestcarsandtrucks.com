@@ -4,8 +4,15 @@ import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { ArrowLeft, Calendar, Gauge, Fuel, BadgeCheck, DollarSign } from "lucide-react";
+import { ArrowLeft, Calendar, Gauge, Fuel, BadgeCheck, DollarSign, ShieldCheck, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface Vehicle {
   id: string;
@@ -27,6 +34,7 @@ const VehicleDetail = () => {
   const [vehicle, setVehicle] = useState<Vehicle | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [showPaymentDialog, setShowPaymentDialog] = useState(false);
 
   useEffect(() => {
     fetchVehicle();
@@ -197,16 +205,75 @@ const VehicleDetail = () => {
               </p>
             </div>
 
-            {/* Contact Button */}
-            <Button
-              size="lg"
-              className="w-full bg-accent hover:bg-accent/90 text-accent-foreground"
-              onClick={() => navigate("/chat")}
-            >
-              Contact Us About This Vehicle
-            </Button>
+            {/* Action Buttons */}
+            <div className="grid grid-cols-2 gap-4">
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={() => navigate("/chat")}
+              >
+                <MessageCircle className="mr-2 h-5 w-5" />
+                Contact Us
+              </Button>
+              <Button
+                size="lg"
+                className="bg-accent hover:bg-accent/90 text-accent-foreground"
+                onClick={() => setShowPaymentDialog(true)}
+              >
+                Buy Now
+              </Button>
+            </div>
           </div>
         </motion.div>
+
+        {/* Payment Dialog */}
+        <Dialog open={showPaymentDialog} onOpenChange={setShowPaymentDialog}>
+          <DialogContent className="max-w-lg">
+            <DialogHeader>
+              <DialogTitle className="text-2xl font-black flex items-center gap-2">
+                <ShieldCheck className="h-6 w-6 text-primary" />
+                Secure Payment Process
+              </DialogTitle>
+              <DialogDescription className="text-base pt-4 space-y-4">
+                <div className="bg-card border border-border rounded-lg p-4">
+                  <h3 className="font-bold text-foreground mb-2">Easy & Secure Payment</h3>
+                  <p className="text-sm">
+                    Make payment directly to admin for fast and secure transaction processing.
+                  </p>
+                </div>
+
+                <div className="bg-card border border-border rounded-lg p-4">
+                  <h3 className="font-bold text-foreground mb-2">Accessible Refunds</h3>
+                  <p className="text-sm">
+                    If any delay occurs in delivery, we offer accessible refunds to ensure your satisfaction.
+                  </p>
+                </div>
+
+                <div className="bg-card border border-border rounded-lg p-4">
+                  <h3 className="font-bold text-foreground mb-2">Contact Admin for Payment</h3>
+                  <p className="text-sm mb-3">
+                    Please chat with our admin team to complete your purchase securely.
+                  </p>
+                  <Button 
+                    className="w-full"
+                    onClick={() => {
+                      setShowPaymentDialog(false);
+                      navigate("/chat");
+                    }}
+                  >
+                    <MessageCircle className="mr-2 h-4 w-4" />
+                    Chat with Admin
+                  </Button>
+                </div>
+
+                <div className="text-xs text-muted-foreground text-center pt-2">
+                  <ShieldCheck className="h-4 w-4 inline mr-1" />
+                  Fast & Secure Payment • Worldwide Delivery
+                </div>
+              </DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
