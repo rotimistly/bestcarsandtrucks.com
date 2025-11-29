@@ -9,6 +9,7 @@ import SellCar from "./pages/SellCar";
 import Inventory from "./pages/Inventory";
 import Chat from "./pages/Chat";
 import AdminChat from "./pages/AdminChat";
+import AdminUploadVehicle from "./pages/AdminUploadVehicle";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ const App = () => (
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/admin/chat" element={<AdminChat />} />
+          <Route path="/admin/upload-vehicle" element={<AdminUploadVehicle />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
