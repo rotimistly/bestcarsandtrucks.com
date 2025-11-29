@@ -14,7 +14,108 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      chat_messages: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_admin: boolean | null
+          message: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_admin?: boolean | null
+          message: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_admin?: boolean | null
+          message?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string | null
+          email: string | null
+          full_name: string | null
+          id: string
+          is_admin: boolean | null
+        }
+        Insert: {
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id: string
+          is_admin?: boolean | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          is_admin?: boolean | null
+        }
+        Relationships: []
+      }
+      vehicles: {
+        Row: {
+          condition: string | null
+          created_at: string | null
+          description: string | null
+          fuel_type: string | null
+          id: string
+          images: string[] | null
+          make: string | null
+          mileage: number | null
+          model: string | null
+          price: number
+          seller_id: string | null
+          status: string | null
+          title: string
+          updated_at: string | null
+          year: number | null
+        }
+        Insert: {
+          condition?: string | null
+          created_at?: string | null
+          description?: string | null
+          fuel_type?: string | null
+          id?: string
+          images?: string[] | null
+          make?: string | null
+          mileage?: number | null
+          model?: string | null
+          price: number
+          seller_id?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+          year?: number | null
+        }
+        Update: {
+          condition?: string | null
+          created_at?: string | null
+          description?: string | null
+          fuel_type?: string | null
+          id?: string
+          images?: string[] | null
+          make?: string | null
+          mileage?: number | null
+          model?: string | null
+          price?: number
+          seller_id?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+          year?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
