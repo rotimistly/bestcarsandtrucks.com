@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { ArrowLeft, Calendar, Gauge, Fuel, BadgeCheck, DollarSign, ShieldCheck, MessageCircle } from "lucide-react";
+import { ArrowLeft, Calendar, Gauge, Fuel, BadgeCheck, DollarSign, ShieldCheck, MessageCircle, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -13,6 +13,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface Vehicle {
   id: string;
@@ -26,6 +36,7 @@ interface Vehicle {
   make: string;
   model: string;
   description: string;
+  seller_id: string | null;
 }
 
 const VehicleDetail = () => {
@@ -35,10 +46,18 @@ const VehicleDetail = () => {
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(0);
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchVehicle();
+    checkUser();
   }, [id]);
+
+  const checkUser = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    setCurrentUserId(session?.user?.id || null);
+  };
 
   const fetchVehicle = async () => {
     try {
@@ -57,6 +76,24 @@ const VehicleDetail = () => {
       setLoading(false);
     }
   };
+
+  const handleDelete = async () => {
+    if (!vehicle) return;
+    
+    const { error } = await supabase
+      .from("vehicles")
+      .delete()
+      .eq("id", vehicle.id);
+
+    if (error) {
+      toast.error("Failed to delete vehicle");
+    } else {
+      toast.success("Vehicle deleted successfully");
+      navigate("/my-listings");
+    }
+  };
+
+  const isOwner = currentUserId && vehicle?.seller_id === currentUserId;
 
   if (loading) {
     return (
@@ -89,14 +126,36 @@ const VehicleDetail = () => {
     <div className="min-h-screen bg-background">
       <Header />
       <div className="container mx-auto px-4 pt-32 pb-16">
-        <Button
-          variant="ghost"
-          onClick={() => navigate("/inventory")}
-          className="mb-6"
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to Inventory
-        </Button>
+        <div className="flex items-center justify-between mb-6">
+          <Button
+            variant="ghost"
+            onClick={() => navigate("/inventory")}
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Inventory
+          </Button>
+          
+          {isOwner && (
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => navigate("/my-listings")}
+              >
+                <Pencil className="h-4 w-4 mr-1" />
+                Edit
+              </Button>
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={() => setShowDeleteDialog(true)}
+              >
+                <Trash2 className="h-4 w-4 mr-1" />
+                Delete
+              </Button>
+            </div>
+          )}
+        </div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -274,6 +333,24 @@ const VehicleDetail = () => {
             </DialogHeader>
           </DialogContent>
         </Dialog>
+
+        {/* Delete Confirmation Dialog */}
+        <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete Vehicle</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to delete "{vehicle?.title}"? This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                Delete
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </div>
   );
