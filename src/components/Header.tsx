@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Car, Menu, X, MessageSquare } from "lucide-react";
+import { Car, Menu, X, MessageSquare, ListOrdered } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Header = () => {
@@ -73,6 +73,12 @@ const Header = () => {
             <Link to="/sell" className="text-foreground hover:text-primary transition-colors font-medium">
               Sell
             </Link>
+            {user && (
+              <Link to="/my-listings" className="text-foreground hover:text-primary transition-colors font-medium flex items-center gap-2">
+                <ListOrdered className="h-4 w-4" />
+                My Listings
+              </Link>
+            )}
             <Link to="/chat" className="text-foreground hover:text-primary transition-colors font-medium flex items-center gap-2">
               <MessageSquare className="h-4 w-4" />
               Support
@@ -152,6 +158,15 @@ const Header = () => {
               >
                 Sell
               </Link>
+              {user && (
+                <Link
+                  to="/my-listings"
+                  className="text-foreground hover:text-primary transition-colors font-medium"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  My Listings
+                </Link>
+              )}
               <Link
                 to="/chat"
                 className="text-foreground hover:text-primary transition-colors font-medium"
