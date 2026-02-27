@@ -1,14 +1,27 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { supabase } from "@/integrations/supabase/client";
 import heroImage from "@/assets/hero-car.jpg";
 
 const Hero = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [vehicleCount, setVehicleCount] = useState(0);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchCount = async () => {
+      const { count } = await supabase
+        .from("vehicles")
+        .select("*", { count: "exact", head: true })
+        .eq("status", "active");
+      setVehicleCount(count || 0);
+    };
+    fetchCount();
+  }, []);
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
@@ -91,7 +104,7 @@ const Hero = () => {
             className="grid grid-cols-3 gap-8 mt-16 max-w-2xl mx-auto"
           >
             <div className="text-center">
-              <div className="text-4xl font-black text-primary mb-2">500+</div>
+              <div className="text-4xl font-black text-primary mb-2">{vehicleCount}+</div>
               <div className="text-sm text-muted-foreground uppercase tracking-wide">Vehicles</div>
             </div>
             <div className="text-center">
