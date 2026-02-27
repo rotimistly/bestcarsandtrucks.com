@@ -309,11 +309,28 @@ const VehicleDetail = () => {
                 </div>
 
                 <div className="bg-card border border-border rounded-lg p-4">
-                  <h3 className="font-bold text-foreground mb-2">Contact Admin for Payment</h3>
+                  <h3 className="font-bold text-foreground mb-2">Contact Us for Safe Payment</h3>
                   <p className="text-sm mb-3">
-                    Please chat with our admin team to complete your purchase securely.
+                    For a secure and traceable payment process, please contact us directly via email. This ensures your payment is tracked and protected.
+                  </p>
+                  <a
+                    href="mailto:bestcarsandtrucks4@gmail.com?subject=Vehicle%20Purchase%20Inquiry"
+                    className="block"
+                  >
+                    <Button className="w-full">
+                      <MessageCircle className="mr-2 h-4 w-4" />
+                      Email: bestcarsandtrucks4@gmail.com
+                    </Button>
+                  </a>
+                </div>
+
+                <div className="bg-card border border-border rounded-lg p-4">
+                  <h3 className="font-bold text-foreground mb-2">Or Chat with Us</h3>
+                  <p className="text-sm mb-3">
+                    You can also reach us through our live chat for quick assistance.
                   </p>
                   <Button 
+                    variant="outline"
                     className="w-full"
                     onClick={() => {
                       setShowPaymentDialog(false);
