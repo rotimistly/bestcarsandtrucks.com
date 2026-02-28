@@ -7,12 +7,12 @@ import { motion } from "framer-motion";
 import { ArrowLeft, Calendar, Gauge, Fuel, BadgeCheck, DollarSign, ShieldCheck, MessageCircle, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -285,71 +285,108 @@ const VehicleDetail = () => {
           </div>
         </motion.div>
 
-        {/* Payment Dialog */}
-        <Dialog open={showPaymentDialog} onOpenChange={setShowPaymentDialog}>
-          <DialogContent className="max-w-lg">
-            <DialogHeader>
-              <DialogTitle className="text-2xl font-black flex items-center gap-2">
+        {/* Payment Sidebar */}
+        <Sheet open={showPaymentDialog} onOpenChange={setShowPaymentDialog}>
+          <SheetContent className="overflow-y-auto w-full sm:max-w-lg">
+            <SheetHeader>
+              <SheetTitle className="text-2xl font-black flex items-center gap-2">
                 <ShieldCheck className="h-6 w-6 text-primary" />
-                Secure Payment Process
-              </DialogTitle>
-              <DialogDescription className="text-base pt-4 space-y-4">
-                <div className="bg-card border border-border rounded-lg p-4">
-                  <h3 className="font-bold text-foreground mb-2">Easy & Secure Payment</h3>
-                  <p className="text-sm">
-                    Make payment directly to admin for fast and secure transaction processing.
-                  </p>
-                </div>
+                Payment Options
+              </SheetTitle>
+              <SheetDescription asChild>
+                <div className="text-base pt-4 space-y-4">
+                  {/* Full Payment */}
+                  <div className="bg-card border border-border rounded-lg p-4">
+                    <h3 className="font-bold text-foreground mb-1">Full Payment</h3>
+                    <p className="text-3xl font-black text-primary mb-1">
+                      ${vehicle?.price.toLocaleString()}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Pay in full and drive away — no monthly payments.
+                    </p>
+                  </div>
 
-                <div className="bg-card border border-border rounded-lg p-4">
-                  <h3 className="font-bold text-foreground mb-2">Accessible Refunds</h3>
-                  <p className="text-sm">
-                    If any delay occurs in delivery, we offer accessible refunds to ensure your satisfaction.
-                  </p>
-                </div>
+                  {/* Down Payment */}
+                  <div className="bg-card border-2 border-primary rounded-lg p-4">
+                    <div className="flex items-center justify-between mb-1">
+                      <h3 className="font-bold text-foreground">Down Payment</h3>
+                      <span className="bg-primary text-primary-foreground text-xs font-bold px-2 py-1 rounded">POPULAR</span>
+                    </div>
+                    <p className="text-3xl font-black text-primary mb-1">$800</p>
+                    <p className="text-sm text-muted-foreground">
+                      Secure the vehicle with just $800 down. Remaining balance of ${((vehicle?.price || 0) - 800).toLocaleString()} paid through financing.
+                    </p>
+                  </div>
 
-                <div className="bg-card border border-border rounded-lg p-4">
-                  <h3 className="font-bold text-foreground mb-2">Contact Us for Safe Payment</h3>
-                  <p className="text-sm mb-3">
-                    For a secure and traceable payment process, please contact us directly via email. This ensures your payment is tracked and protected.
-                  </p>
-                  <a
-                    href="mailto:bestcarsandtrucks4@gmail.com?subject=Vehicle%20Purchase%20Inquiry"
-                    className="block"
-                  >
-                    <Button className="w-full">
-                      <MessageCircle className="mr-2 h-4 w-4" />
-                      Email: bestcarsandtrucks4@gmail.com
+                  {/* Financing */}
+                  <div className="bg-card border border-border rounded-lg p-4">
+                    <h3 className="font-bold text-foreground mb-2">💰 Financing Available</h3>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Down Payment</span>
+                        <span className="font-bold text-foreground">$800</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Est. 36 months</span>
+                        <span className="font-bold text-foreground">${Math.round(((vehicle?.price || 0) - 800) / 36).toLocaleString()}/mo</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Est. 48 months</span>
+                        <span className="font-bold text-foreground">${Math.round(((vehicle?.price || 0) - 800) / 48).toLocaleString()}/mo</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Est. 60 months</span>
+                        <span className="font-bold text-foreground">${Math.round(((vehicle?.price || 0) - 800) / 60).toLocaleString()}/mo</span>
+                      </div>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-2">*Estimated payments. Final terms based on credit approval. Contact us for details.</p>
+                  </div>
+
+                  {/* Buy / Contact */}
+                  <div className="bg-card border border-border rounded-lg p-4">
+                    <h3 className="font-bold text-foreground mb-2">Ready to Buy?</h3>
+                    <p className="text-sm mb-3">
+                      Contact us directly via email for a secure and traceable payment process.
+                    </p>
+                    <a
+                      href={`mailto:bestcarsandtrucks4@gmail.com?subject=Purchase Inquiry: ${vehicle?.title}&body=I am interested in purchasing ${vehicle?.title} (Price: $${vehicle?.price.toLocaleString()}).%0A%0APayment option: `}
+                      className="block"
+                    >
+                      <Button className="w-full" size="lg">
+                        <MessageCircle className="mr-2 h-5 w-5" />
+                        Email: bestcarsandtrucks4@gmail.com
+                      </Button>
+                    </a>
+                  </div>
+
+                  <div className="bg-card border border-border rounded-lg p-4">
+                    <h3 className="font-bold text-foreground mb-2">Or Chat with Us</h3>
+                    <p className="text-sm mb-3">
+                      Reach us through live chat for quick assistance with payment or financing.
+                    </p>
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      size="lg"
+                      onClick={() => {
+                        setShowPaymentDialog(false);
+                        navigate("/chat");
+                      }}
+                    >
+                      <MessageCircle className="mr-2 h-5 w-5" />
+                      Chat with Admin
                     </Button>
-                  </a>
-                </div>
+                  </div>
 
-                <div className="bg-card border border-border rounded-lg p-4">
-                  <h3 className="font-bold text-foreground mb-2">Or Chat with Us</h3>
-                  <p className="text-sm mb-3">
-                    You can also reach us through our live chat for quick assistance.
-                  </p>
-                  <Button 
-                    variant="outline"
-                    className="w-full"
-                    onClick={() => {
-                      setShowPaymentDialog(false);
-                      navigate("/chat");
-                    }}
-                  >
-                    <MessageCircle className="mr-2 h-4 w-4" />
-                    Chat with Admin
-                  </Button>
+                  <div className="text-xs text-muted-foreground text-center pt-2">
+                    <ShieldCheck className="h-4 w-4 inline mr-1" />
+                    Secure Payment • Financing Available • Worldwide Delivery
+                  </div>
                 </div>
-
-                <div className="text-xs text-muted-foreground text-center pt-2">
-                  <ShieldCheck className="h-4 w-4 inline mr-1" />
-                  Fast & Secure Payment • Worldwide Delivery
-                </div>
-              </DialogDescription>
-            </DialogHeader>
-          </DialogContent>
-        </Dialog>
+              </SheetDescription>
+            </SheetHeader>
+          </SheetContent>
+        </Sheet>
 
         {/* Delete Confirmation Dialog */}
         <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
